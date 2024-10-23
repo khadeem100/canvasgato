@@ -32,10 +32,10 @@ export const SubscriptionModal = () => {
             height={36}
           />
           <DialogTitle className="text-center">
-            Upgrade to a paid plan
+            Upgrade to a pro version
           </DialogTitle>
           <DialogDescription className="text-center">
-            Upgrade to a paid plan to unlock more features
+            The pro version is only available for official GATO customers
           </DialogDescription>
         </DialogHeader>
         <Separator />
