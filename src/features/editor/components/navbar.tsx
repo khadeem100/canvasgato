@@ -155,7 +155,7 @@ export const Navbar = ({
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <Button size="sm" variant="ghost">
-                Export
+                Confirm & Send
                 <Download className="size-4 ml-4" />
               </Button>
             </DropdownMenuTrigger>

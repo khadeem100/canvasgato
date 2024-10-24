@@ -58,6 +58,7 @@ export const fonts = [
   "Lucida Sans Unicode",
   "Geneva",
   "Lucida Console",
+  "Open Sans",
 ];
 
 export const selectionDependentTools = [
