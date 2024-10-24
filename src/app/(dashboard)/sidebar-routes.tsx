@@ -1,6 +1,6 @@
 "use client";
 
-import { CreditCard, Crown, Home, MessageCircleQuestion } from "lucide-react";
+import { CreditCard, Crown, Home, MessageCircleQuestion, Rotate3d, ShoppingBag } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import { usePaywall } from "@/features/subscriptions/hooks/use-paywall";
@@ -56,9 +56,11 @@ export const SidebarRoutes = () => {
         <Separator />
       </div>
       <ul className="flex flex-col gap-y-1 px-3">
-        <SidebarItem href={pathname} icon={CreditCard} label="Billing" onClick={onClick} />
+        <SidebarItem href={pathname} icon={Crown} label="Admin" onClick={onClick} />
+        <SidebarItem href='https://gatosports.com' icon={ShoppingBag} label="Gato-shop" onClick={onClick} />
+        <SidebarItem href='https://threejs-t-shirt-main.vercel.app/' icon={Rotate3d} label="3D Viewer" onClick={onClick} />
         <SidebarItem
-          href="mailto:support@example.com"
+          href="mailto:office@gato-international.com"
           icon={MessageCircleQuestion}
           label="Get Help"
         />
