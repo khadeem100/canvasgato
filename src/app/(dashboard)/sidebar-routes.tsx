@@ -1,6 +1,6 @@
 "use client";
 
-import { CreditCard, Crown, Home, MessageCircleQuestion, Rotate3d, ShoppingBag } from "lucide-react";
+import { BookText, CreditCard, Crown, Home, MessageCircleQuestion, PackageCheck, Rotate3d, ShoppingBag } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import { usePaywall } from "@/features/subscriptions/hooks/use-paywall";
@@ -51,6 +51,7 @@ export const SidebarRoutes = () => {
       )}
       <ul className="flex flex-col gap-y-1 px-3">
         <SidebarItem href="/" icon={Home} label="Home" isActive={pathname === "/"} />
+        <SidebarItem href="https://gato-calender.vercel.app/" icon={PackageCheck} label="Order Confirmation" isActive={pathname === ""} />
       </ul>
       <div className="px-3">
         <Separator />
@@ -64,6 +65,7 @@ export const SidebarRoutes = () => {
           icon={MessageCircleQuestion}
           label="Get Help"
         />
+        <SidebarItem href={pathname} icon={BookText} label="Documentation" onClick={onClick} />
       </ul>
     </div>
   );

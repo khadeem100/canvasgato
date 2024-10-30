@@ -155,9 +155,51 @@ const buildEditor = ({
       const center = canvas.getCenter();
       canvas.zoomToPoint(
         new fabric.Point(center.left, center.top),
-        zoomRatio > 1 ? 1 : zoomRatio
+        zoomRatio // Remove upper limit to allow infinite zoom
       );
     },
+    moveLeft: () => {
+      if (!canvas || !canvas.viewportTransform) {
+        console.error("Canvas or viewportTransform is undefined.");
+        return; // Exit the function if canvas or viewportTransform is undefined
+      }
+    
+      const currentZoom = canvas.getZoom();
+      const moveAmount = 20 / currentZoom; // Calculate how much to move based on the zoom level
+      canvas.viewportTransform[4] -= moveAmount; // Move left by subtracting from x translation
+      canvas.renderAll(); // Re-render the canvas to reflect changes
+    },
+    
+    moveRight: () => {
+      if (!canvas || !canvas.viewportTransform) {
+        console.error("Canvas or viewportTransform is undefined.");
+        return; // Exit the function if canvas or viewportTransform is undefined
+      }
+    
+      const currentZoom = canvas.getZoom();
+      const moveAmount = 20 / currentZoom; // Calculate how much to move based on the zoom level
+      canvas.viewportTransform[4] += moveAmount; // Move right by adding to x translation
+      canvas.renderAll(); // Re-render the canvas to reflect changes
+    },
+    
+        moveUp: () => {
+          if (canvas.viewportTransform) {
+              const [a, b, c, d, e, f] = canvas.viewportTransform;
+              const moveAmount = 10; // Adjust this value to change the speed of the movement
+              canvas.viewportTransform[5] -= moveAmount; // Move up
+              canvas.requestRenderAll();
+          }
+      },
+      
+      moveDown: () => {
+          if (canvas.viewportTransform) {
+              const [a, b, c, d, e, f] = canvas.viewportTransform;
+              const moveAmount = 10; // Adjust this value to change the speed of the movement
+              canvas.viewportTransform[5] += moveAmount; // Move down
+              canvas.requestRenderAll();
+          }
+      },
+        
     zoomOut: () => {
       let zoomRatio = canvas.getZoom();
       zoomRatio -= 0.05;

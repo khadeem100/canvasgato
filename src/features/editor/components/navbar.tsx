@@ -174,7 +174,15 @@ export const Navbar = ({
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="flex items-center gap-x-2"
-                onClick={() => editor?.savePng()}
+                onClick={() => {
+                  // Save PNG
+                  editor?.savePng();
+
+                  // Redirect after a short delay
+                  setTimeout(() => {
+                    window.open('https://gato-calender.vercel.app/', '_blank');
+                  }, 500); // Adjust the delay as needed (500ms = 0.5 seconds)
+                }}
               >
                 <CiFileOn className="size-8" />
                 <div>
@@ -186,16 +194,21 @@ export const Navbar = ({
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="flex items-center gap-x-2"
-                onClick={() => editor?.saveJpg()}
+                onClick={() => {
+                  const jpgBlob = editor?.saveJpg(); // Assuming this function returns a Blob or URL
+                  if (jpgBlob) {
+                    const mailtoLink = `mailto:it@gatosports.com?subject=JPG File&body=Please find the attached JPG file: ${jpgBlob}`;
+                    window.location.href = mailtoLink;
+                  }
+                }}
               >
                 <CiFileOn className="size-8" />
                 <div>
                   <p>JPG</p>
-                  <p className="text-xs text-muted-foreground">
-                    Best for printing
-                  </p>
+                  <p className="text-xs text-muted-foreground">Best for printing</p>
                 </div>
               </DropdownMenuItem>
+
               <DropdownMenuItem
                 className="flex items-center gap-x-2"
                 onClick={() => editor?.saveSvg()}

@@ -7,8 +7,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ResponseType } from "@/features/projects/api/use-get-project";
 import { useUpdateProject } from "@/features/projects/api/use-update-project";
 
-import { 
-  ActiveTool, 
+import {
+  ActiveTool,
   selectionDependentTools
 } from "@/features/editor/types";
 import { Navbar } from "@/features/editor/components/navbar";
@@ -38,7 +38,6 @@ interface EditorProps {
 export const Editor = ({ initialData }: EditorProps) => {
   const { mutate } = useUpdateProject(initialData.id);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSave = useCallback(
     debounce(
       (values: { 
@@ -47,9 +46,11 @@ export const Editor = ({ initialData }: EditorProps) => {
         width: number,
       }) => {
         mutate(values);
-    },
-    500
-  ), [mutate]);
+      },
+      500
+    ), 
+    [mutate]
+  );
 
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
 
@@ -83,11 +84,11 @@ export const Editor = ({ initialData }: EditorProps) => {
     setActiveTool(tool);
   }, [activeTool, editor]);
 
-  const canvasRef = useRef(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const canvas = new fabric.Canvas(canvasRef.current, {
+    const canvas = new fabric.Canvas(canvasRef.current!, {
       controlsAboveOverlay: true,
       preserveObjectStacking: true,
     });

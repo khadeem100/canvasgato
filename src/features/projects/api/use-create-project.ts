@@ -27,7 +27,7 @@ export const useCreateProject = () => {
     },
     onError: () => {
       toast.error(
-        "Failed to create project. The session token may have expired, logout and login again, and everything will work fine."
+        "That doesn't look right. The session token may have expired, logout and login again, and the Gato-canvas will work fine."
       );
     },
   });

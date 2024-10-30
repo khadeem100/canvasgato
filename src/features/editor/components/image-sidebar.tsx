@@ -34,19 +34,33 @@ export const ImageSidebar = ({ editor, activeTool, onChangeActiveTool }: ImageSi
     >
       <ToolSidebarHeader title="Images" description="Add images to your canvas" />
       <div className="p-4 border-b">
-        <UploadButton
-          appearance={{
-            button: "w-full text-sm font-medium",
-            allowedContent: "hidden",
-          }}
-          content={{
-            button: "Upload Image",
-          }}
-          endpoint="imageUploader"
-          onClientUploadComplete={(res) => {
+      <UploadButton
+        appearance={{
+          button: "w-full text-sm font-medium",
+          allowedContent: "hidden",
+        }}
+        content={{
+          button: "Upload a logo",
+        }}
+        endpoint="imageUploader"
+        onClientUploadComplete={(res) => {
+          const allowedFileTypes = [
+            "application/postscript",           // EPS
+            "image/svg+xml",                    // SVG
+            "application/pdf",                  // PDF
+            "application/vnd.adobe.illustrator" // AI
+          ];
+
+          // Check if the file type of the first result matches allowed types
+          const fileType = res[0]?.type;
+          if (allowedFileTypes.includes(fileType)) {
             editor?.addImage(res[0].url);
-          }}
-        />
+          } else {
+            alert("Unsupported file type. Please upload EPS, SVG, AI, or PDF files.");
+          }
+        }}
+      />
+
       </div>
       {isLoading && (
         <div className="flex items-center justify-center flex-1">

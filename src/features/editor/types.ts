@@ -217,6 +217,10 @@ export interface Editor {
   autoZoom: () => void;
   zoomIn: () => void;
   zoomOut: () => void;
+  moveLeft: () => void;
+  moveRight: () => void;
+  moveUp: () => void;
+  moveDown: () => void;
   getWorkspace: () => fabric.Object | undefined;
   changeBackground: (value: string) => void;
   changeSize: (value: { width: number; height: number }) => void;
