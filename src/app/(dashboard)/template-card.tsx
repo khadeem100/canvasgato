@@ -49,7 +49,7 @@ export const TemplateCard = ({
         )}
         <div className="opacity-0 group-hover:opacity-100 transition absolute inset-0 bg-black/50 flex items-center justify-center rounded-xl backdrop-filter backdrop-blur-sm">
           <p className="text-white font-medium">
-            Open in editor
+            Open File
           </p>
         </div>
       </div>

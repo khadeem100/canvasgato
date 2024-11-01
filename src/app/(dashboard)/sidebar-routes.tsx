@@ -1,6 +1,16 @@
 "use client";
 
-import { BookText, CreditCard, Crown, Home, MessageCircleQuestion, PackageCheck, Rotate3d, ShoppingBag } from "lucide-react";
+import {
+  BookText,
+  CreditCard,
+  Crown,
+  Home,
+  MessageCircleQuestion,
+  PackageCheck,
+  Rotate3d,
+  ShoppingBag,
+  StickyNote,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import { usePaywall } from "@/features/subscriptions/hooks/use-paywall";
@@ -11,6 +21,20 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
 import { SidebarItem } from "./sidebar-item";
+
+// New NotesCard component for displaying your notes
+const NotesCard = () => {
+  return (
+    <div className="p-4 bg-gray-100 rounded-lg shadow-md">
+      
+      <h3 className="text-lg font-bold mb-2">Reminder</h3>
+      <p className="text-sm text-gray-600">
+        {/* Example Note - Replace this text with actual notes */}
+        Don't forget to Finish your Order submission
+      </p>
+    </div>
+  );
+};
 
 export const SidebarRoutes = () => {
   const mutation = useCheckout();
@@ -49,13 +73,21 @@ export const SidebarRoutes = () => {
           </div>
         </>
       )}
+      
+      {/* Add NotesCard here */}
+      <div className="px-3">
+        <NotesCard />
+      </div>
+      
       <ul className="flex flex-col gap-y-1 px-3">
         <SidebarItem href="/" icon={Home} label="Home" isActive={pathname === "/"} />
         <SidebarItem href="https://gato-calender.vercel.app/" icon={PackageCheck} label="Order Confirmation" isActive={pathname === ""} />
       </ul>
+      
       <div className="px-3">
         <Separator />
       </div>
+      
       <ul className="flex flex-col gap-y-1 px-3">
         <SidebarItem href={pathname} icon={Crown} label="Admin" onClick={onClick} />
         <SidebarItem href='https://gatosports.com' icon={ShoppingBag} label="Gato-shop" onClick={onClick} />

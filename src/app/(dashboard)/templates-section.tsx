@@ -46,7 +46,7 @@ export const TemplatesSection = () => {
     return (
       <div className="space-y-4">
         <h3 className="font-semibold text-lg">
-          Start from a template
+          Choose your product below
         </h3>
         <div className="flex items-center justify-center h-32">
           <Loader className="size-6 text-muted-foreground animate-spin" />
@@ -78,7 +78,7 @@ export const TemplatesSection = () => {
   return (
     <div>
       <h3 className="font-semibold text-lg">
-        Start from a template
+        Choose your product below
       </h3>
       <div className="grid grid-cols-2 md:grid-cols-4 mt-4 gap-4">
         {data?.map((template) => (

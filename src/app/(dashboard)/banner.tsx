@@ -38,9 +38,9 @@ export const Banner = () => {
         </div>
       </div>
       <div className="flex flex-col gap-y-2">
-        <h1 className="text-xl md:text-3xl font-semibold">Start your design right here</h1>
+        <h1 className="text-xl md:text-3xl font-semibold">GATO-INTERNATIONAL</h1>
         <p className="text-xs md:text-sm mb-2">
-        Transform Your Ideas into Wearable Art
+        DEVELOPING|SOURCING|BRANDING
         </p>
         <Button
           disabled={mutation.isPending}
@@ -48,7 +48,7 @@ export const Banner = () => {
           variant="secondary"
           className="w-[160px]"
         >
-          Start Here
+          Blank FIle
           {loading ? (
             <Loader2 className="size-4 ml-2 animate-spin" />
           ) : (
