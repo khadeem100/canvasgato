@@ -90,8 +90,8 @@ export const SidebarRoutes = () => {
       
       <ul className="flex flex-col gap-y-1 px-3">
         <SidebarItem href={pathname} icon={Crown} label="Admin" onClick={onClick} />
-        <SidebarItem href='https://gatosports.com' icon={ShoppingBag} label="Gato-shop" onClick={onClick} />
-        <SidebarItem href='https://threejs-t-shirt-main.vercel.app/' icon={Rotate3d} label="3D Viewer" onClick={onClick} />
+        <SidebarItem href="https://gatosports.com" icon={ShoppingBag} label="Gato-shop" onClick={onClick} />
+        <SidebarItem href="https://threejs-t-shirt-main.vercel.app/" icon={Rotate3d} label="3D Viewer" onClick={onClick} />
         <SidebarItem
           href="mailto:office@gato-international.com"
           icon={MessageCircleQuestion}
