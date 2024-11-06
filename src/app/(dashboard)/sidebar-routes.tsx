@@ -30,7 +30,7 @@ const NotesCard = () => {
       <h3 className="text-lg font-bold mb-2">Reminder</h3>
       <p className="text-sm text-gray-600">
         {/* Example Note - Replace this text with actual notes */}
-        Don't forget to Finish your Order submission
+        Don&apos;t forget to finish your order submission
       </p>
     </div>
   );
@@ -102,3 +102,4 @@ export const SidebarRoutes = () => {
     </div>
   );
 };
+
