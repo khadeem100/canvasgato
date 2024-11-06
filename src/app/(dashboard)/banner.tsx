@@ -48,7 +48,7 @@ export const Banner = () => {
           variant="secondary"
           className="w-[160px]"
         >
-          Blank FIle
+          Blank File
           {loading ? (
             <Loader2 className="size-4 ml-2 animate-spin" />
           ) : (

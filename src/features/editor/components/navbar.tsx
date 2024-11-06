@@ -69,6 +69,16 @@ export const Navbar = ({
     },
   });
 
+  // Function for handling JSON download with password protection
+  const handleJsonDownload = () => {
+    const password = prompt("Enter the password to download the JSON file:");
+    if (password === "Haarlem130") {  // Replace with actual password
+      editor?.saveJson();
+    } else {
+      alert("Incorrect password. Unable to download JSON file.");
+    }
+  };
+
   return (
     <nav className="w-full flex items-center p-4 h-[68px] gap-x-8 border-b lg:pl-[34px]">
       <Logo />
@@ -162,62 +172,25 @@ export const Navbar = ({
             <DropdownMenuContent align="end" className="min-w-60">
               <DropdownMenuItem
                 className="flex items-center gap-x-2"
-                onClick={() => editor?.saveJson()}
+                onClick={handleJsonDownload}
               >
                 <CiFileOn className="size-8" />
                 <div>
                   <p>JSON</p>
                   <p className="text-xs text-muted-foreground">
-                    Save for later editing
+                    Only for admins (password required)
                   </p>
                 </div>
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="flex items-center gap-x-2"
-                onClick={() => {
-                  // Save PNG
-                  editor?.savePng();
-
-                  // Redirect after a short delay
-                  setTimeout(() => {
-                    window.open('https://gato-calender.vercel.app/', '_blank');
-                  }, 500); // Adjust the delay as needed (500ms = 0.5 seconds)
-                }}
+                onClick={() => editor?.savePng()}
               >
                 <CiFileOn className="size-8" />
                 <div>
                   <p>PNG</p>
                   <p className="text-xs text-muted-foreground">
                     Best for sharing on the web
-                  </p>
-                </div>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="flex items-center gap-x-2"
-                onClick={() => {
-                  const jpgBlob = editor?.saveJpg(); // Assuming this function returns a Blob or URL
-                  if (jpgBlob) {
-                    const mailtoLink = `mailto:it@gatosports.com?subject=JPG File&body=Please find the attached JPG file: ${jpgBlob}`;
-                    window.location.href = mailtoLink;
-                  }
-                }}
-              >
-                <CiFileOn className="size-8" />
-                <div>
-                  <p>JPG</p>
-                  <p className="text-xs text-muted-foreground">Best for printing</p>
-                </div>
-              </DropdownMenuItem>
-
-              <DropdownMenuItem
-                className="flex items-center gap-x-2"
-                onClick={() => editor?.saveSvg()}
-              >
-                <CiFileOn className="size-8" />
-                <div>
-                  <p>SVG</p>
-                  <p className="text-xs text-muted-foreground">
-                    Best for editing in vector software
                   </p>
                 </div>
               </DropdownMenuItem>
