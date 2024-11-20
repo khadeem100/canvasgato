@@ -81,7 +81,7 @@ export const SidebarRoutes = () => {
       
       <ul className="flex flex-col gap-y-1 px-3">
         <SidebarItem href="/" icon={Home} label="Home" isActive={pathname === "/"} />
-        <SidebarItem href="https://gato-calender.vercel.app/" icon={PackageCheck} label="Order Confirmation" isActive={pathname === ""} />
+        <SidebarItem href="https://gato-calender.vercel.app/" icon={PackageCheck} label="Create Order Confirmation" isActive={pathname === ""} />
       </ul>
       
       <div className="px-3">
