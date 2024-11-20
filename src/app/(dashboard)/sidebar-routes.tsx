@@ -30,7 +30,7 @@ const NotesCard = () => {
       <h3 className="text-lg font-bold mb-2">Reminder</h3>
       <p className="text-sm text-gray-600">
         {/* Example Note - Replace this text with actual notes */}
-        Don&apos;t forget to finish your order submission
+        Don&apos;t forget to finish your order submission after creating you visual file
       </p>
     </div>
   );

@@ -188,9 +188,9 @@ export const Navbar = ({
               >
                 <CiFileOn className="size-8" />
                 <div>
-                  <p>PNG</p>
+                  <p>Download</p>
                   <p className="text-xs text-muted-foreground">
-                    Best for sharing on the web
+                    Upload this file to your order
                   </p>
                 </div>
               </DropdownMenuItem>
