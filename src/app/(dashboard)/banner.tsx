@@ -10,24 +10,35 @@ import { useState } from "react";
 
 export const Banner = () => {
   const [loading, setLoading] = useState(false);
+  const [password, setPassword] = useState("");
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
   const router = useRouter();
   const mutation = useCreateProject();
 
   const onClick = () => {
-    setLoading(true);
-    mutation.mutate(
-      {
-        name: "Gato-project",
-        json: "",
-        width: 1200,
-        height: 900,
-      },
-      {
-        onSuccess: ({ data }) => {
-          router.push(`/editor/${data.id}`);
+    if (password === "Haarlem130") {
+      setLoading(true);
+      mutation.mutate(
+        {
+          name: "Gato-project",
+          json: "",
+          width: 1200,
+          height: 900,
         },
-      }
-    );
+        {
+          onSuccess: ({ data }) => {
+            router.push(`/editor/${data.id}`);
+          },
+        }
+      );
+    } else {
+      alert("Incorrect password");
+    }
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+    setIsPasswordValid(e.target.value === "Haarlem130");
   };
 
   return (
@@ -40,10 +51,17 @@ export const Banner = () => {
       <div className="flex flex-col gap-y-2">
         <h1 className="text-xl md:text-3xl font-semibold">GATO-INTERNATIONAL</h1>
         <p className="text-xs md:text-sm mb-2">
-        DEVELOPING|SOURCING|BRANDING
+          DEVELOPING|SOURCING|BRANDING
         </p>
+        <input
+          type="password"
+          value={password}
+          onChange={handlePasswordChange}
+          placeholder="Enter password"
+          className="mb-4 p-2 rounded-md border border-gray-300"
+        />
         <Button
-          disabled={mutation.isPending}
+          disabled={mutation.isPending || !isPasswordValid}
           onClick={onClick}
           variant="secondary"
           className="w-[160px]"
@@ -59,3 +77,4 @@ export const Banner = () => {
     </div>
   );
 };
+
