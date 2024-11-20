@@ -57,7 +57,7 @@ export const Banner = () => {
           type="password"
           value={password}
           onChange={handlePasswordChange}
-          placeholder="Enter password"
+          placeholder="Admin password"
           className="mb-4 p-2 rounded-md border border-gray-300"
         />
         <Button
