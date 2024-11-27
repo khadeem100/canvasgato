@@ -114,8 +114,7 @@ export const Editor = ({ initialData }: EditorProps) => {
       <div className="absolute h-[calc(100%-68px)] w-full top-[68px] flex">
         <Sidebar
           activeTool={activeTool}
-          onChangeActiveTool={onChangeActiveTool}
-        />
+          onChangeActiveTool={onChangeActiveTool} editor={undefined}        />
         <ShapeSidebar
           editor={editor}
           activeTool={activeTool}

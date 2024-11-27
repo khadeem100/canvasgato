@@ -1,12 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
-  LayoutTemplate,
+  HomeIcon,
   ImageIcon,
+  InfoIcon,
+  LayoutTemplate,
+  MailIcon,
   Pencil,
   Settings,
   Shapes,
+  Shirt,
+  ShoppingCartIcon,
   Sparkles,
   Type,
 } from "lucide-react";
@@ -14,38 +19,13 @@ import {
 import { ActiveTool, Editor } from "@/features/editor/types";
 import { SidebarItem } from "@/features/editor/components/sidebar-item";
 
-// Mock product data
+// Initial product categories
 const productCategories = {
-  Tshirts: Array.from({ length: 5 }, (_, i) => ({
-    id: i + 1,
-    name: `T-shirt ${i + 1}`,
-    image: `/images/tshirt.png`,
-    colors: ["Red", "Blue", "Black", "White"],
-  })),
-  Hoodies: Array.from({ length: 5 }, (_, i) => ({
-    id: i + 6,
-    name: `Hoodie ${i + 1}`,
-    image: `/images/hoodie${i + 1}.png`,
-    colors: ["Gray", "Black", "White"],
-  })),
-  Pants: Array.from({ length: 5 }, (_, i) => ({
-    id: i + 11,
-    name: `Pants ${i + 1}`,
-    image: `/images/pants${i + 1}.png`,
-    colors: ["Black", "Navy"],
-  })),
-  Longsleeves: Array.from({ length: 5 }, (_, i) => ({
-    id: i + 16,
-    name: `Longsleeve ${i + 1}`,
-    image: `/images/longsleeve${i + 1}.png`,
-    colors: ["Red", "Blue"],
-  })),
-  Bags: Array.from({ length: 5 }, (_, i) => ({
-    id: i + 21,
-    name: `Bag ${i + 1}`,
-    image: `/images/bag${i + 1}.png`,
-    colors: ["Brown", "Black"],
-  })),
+  Tshirts: [],
+  Hoodies: [],
+  Pants: [],
+  Longsleeves: [],
+  Bags: [],
 };
 
 interface SidebarProps {
@@ -60,29 +40,82 @@ export const Sidebar = ({
   onChangeActiveTool,
 }: SidebarProps) => {
   const [isPopupOpen, setPopupOpen] = useState(false);
-  const [isColorPickerOpen, setColorPickerOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<keyof typeof productCategories>("Tshirts");
-  const [selectedProduct, setSelectedProduct] = useState<null | (typeof productCategories)[keyof typeof productCategories][0]>(null);
-  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<null | any>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedColor, setSelectedColor] = useState<string | "">("");
+  const [selectedGender, setSelectedGender] = useState<string | "">("");
+  const [isAdminFormVisible, setAdminFormVisible] = useState(false); // Track visibility of the admin form
 
-  const handleProductSelect = (product: (typeof productCategories)[keyof typeof productCategories][0]) => {
+  // New product state for managing product creation
+  const [newProduct, setNewProduct] = useState({
+    id: "",
+    category: "Tshirts",
+    name: "",
+    size: "",
+    color: "",
+    image: "",
+  });
+
+  // Load saved products from localStorage on mount
+  const loadProductsFromStorage = () => {
+    const savedProducts = localStorage.getItem("products");
+    return savedProducts ? JSON.parse(savedProducts) : [];
+  };
+
+  // Save products to localStorage
+  const saveProductsToStorage = (products: any[]) => {
+    localStorage.setItem("products", JSON.stringify(products));
+  };
+
+  // Array to store created products, loaded from localStorage
+  const [products, setProducts] = useState<any[]>(loadProductsFromStorage);
+
+  // Handle the form input changes
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setNewProduct((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Handle product creation and save to localStorage
+  const handleCreateProduct = () => {
+    const newProductData = { ...newProduct, id: Date.now() }; // Set unique ID using timestamp
+    const updatedProducts = [...products, newProductData];
+    setProducts(updatedProducts);
+    saveProductsToStorage(updatedProducts); // Save the updated products to localStorage
+    setNewProduct({
+      id: "",
+      category: "Tshirts",
+      name: "",
+      size: "",
+      color: "",
+      image: "",
+    }); // Reset form after submission
+  };
+
+  const handleProductSelect = (product: any) => {
     setSelectedProduct(product);
-    setColorPickerOpen(true);
-  };
-
-  const handleColorSelect = (color: string) => {
-    setSelectedColor(color);
-    if (editor && selectedProduct) {
-      editor.addImage(`${selectedProduct.image}?color=${color}`); // Add product image with selected color to canvas
+    if (editor && product) {
+      // Check if the editor object has the addImage method
+      if (typeof editor.addImage === "function") {
+        editor.addImage(product.image); // Add the image of the selected product to the editor
+      }
     }
-    setColorPickerOpen(false);
-    setPopupOpen(false);
+    setPopupOpen(false); // Close the popup after selecting a product
   };
 
-  const filteredProducts = productCategories[selectedCategory].filter((product) =>
-    product.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const handleResetFilters = () => {
+    setSelectedColor("");
+    setSelectedGender("");
+    setSearchQuery("");
+  };
+
+  // Filter products based on category, search query, color, and gender
+  const filteredProducts = products
+    .filter((product) => product.name.toLowerCase().includes(searchQuery.toLowerCase()))
+    .filter((product) => (selectedColor ? product.color === selectedColor : true))
+    .filter((product) => (selectedGender ? product.gender === selectedGender : true))
+    .filter((product) => product.category === selectedCategory); // Filter by selected category
 
   return (
     <>
@@ -95,40 +128,10 @@ export const Sidebar = ({
             onClick={() => onChangeActiveTool("templates")}
           />
           <SidebarItem
-            icon={LayoutTemplate}
+            icon={Shirt}
             label="Product"
             isActive={activeTool === "templates"}
             onClick={() => setPopupOpen(true)} // Open popup
-          />
-          <SidebarItem
-            icon={ImageIcon}
-            label="Image"
-            isActive={activeTool === "images"}
-            onClick={() => onChangeActiveTool("images")}
-          />
-          <SidebarItem
-            icon={Type}
-            label="Text"
-            isActive={activeTool === "text"}
-            onClick={() => onChangeActiveTool("text")}
-          />
-          <SidebarItem
-            icon={Shapes}
-            label="Shapes"
-            isActive={activeTool === "shapes"}
-            onClick={() => onChangeActiveTool("shapes")}
-          />
-          <SidebarItem
-            icon={Pencil}
-            label="Draw"
-            isActive={activeTool === "draw"}
-            onClick={() => onChangeActiveTool("draw")}
-          />
-          <SidebarItem
-            icon={Sparkles}
-            label="AI"
-            isActive={activeTool === "ai"}
-            onClick={() => onChangeActiveTool("ai")}
           />
           <SidebarItem
             icon={Settings}
@@ -136,37 +139,102 @@ export const Sidebar = ({
             isActive={activeTool === "settings"}
             onClick={() => onChangeActiveTool("settings")}
           />
+          {/* Admin button to toggle the product creation form */}
+          <SidebarItem
+            icon={ShoppingCartIcon}
+            label="Admin"
+            onClick={() => setAdminFormVisible(!isAdminFormVisible)} // Toggle form visibility
+          />
         </ul>
       </aside>
+
+      {/* Admin Product Creation Form (Visible only when admin button is clicked) */}
+      {isAdminFormVisible && (
+        <div className="p-4 bg-white shadow-lg mt-4">
+          <h2 className="text-lg font-bold">Create a New Product</h2>
+          <form
+            className="flex flex-col mt-4 space-y-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleCreateProduct();
+            }}
+          >
+            <input
+              type="text"
+              name="name"
+              value={newProduct.name}
+              onChange={handleInputChange}
+              placeholder="Product Name"
+              className="p-2 border rounded-md"
+            />
+            <select
+              name="category"
+              value={newProduct.category}
+              onChange={handleInputChange}
+              className="p-2 border rounded-md"
+            >
+              <option value="Tshirts">T-shirt</option>
+              <option value="Hoodies">Hoodie</option>
+              <option value="Pants">Pants</option>
+              <option value="Longsleeves">Longsleeve</option>
+              <option value="Bags">Bag</option>
+            </select>
+            <input
+              type="text"
+              name="size"
+              value={newProduct.size}
+              onChange={handleInputChange}
+              placeholder="Size (S, M, L, XL)"
+              className="p-2 border rounded-md"
+            />
+            <input
+              type="text"
+              name="color"
+              value={newProduct.color}
+              onChange={handleInputChange}
+              placeholder="Color"
+              className="p-2 border rounded-md"
+            />
+            <input
+              type="text"
+              name="image"
+              value={newProduct.image}
+              onChange={handleInputChange}
+              placeholder="Image URL"
+              className="p-2 border rounded-md"
+            />
+            <button
+              type="submit"
+              className="bg-blue-500 text-white p-2 rounded-md mt-4"
+            >
+              Create Product
+            </button>
+          </form>
+        </div>
+      )}
 
       {/* Popup for product selection */}
       {isPopupOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-[800px] h-[600px] flex flex-col">
-            <div className="flex justify-between items-center mb-4 border-b pb-2">
-              <input
-                type="text"
-                placeholder="Search products..."
-                className="w-[400px] p-2 border rounded-md"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              <button
-                className="text-red-500 hover:underline"
-                onClick={() => setPopupOpen(false)}
-              >
-                Close
-              </button>
-            </div>
-            <div className="flex flex-1">
-              <div className="w-[200px] border-r p-4">
-                <h3 className="text-lg font-bold mb-4">Categories</h3>
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[1000px] h-[900px] flex flex-col">
+            {/* Close Button */}
+            <button
+              className="absolute top-4 right-4 text-xl text-gray-600"
+              onClick={() => setPopupOpen(false)} // Close popup
+            >
+              &times;
+            </button>
+
+            <div className="flex">
+              {/* Left Sidebar for filtering products */}
+              <div className="w-[250px] border-r p-4">
+                <h3 className="font-bold mb-2">Categories</h3>
                 <ul className="space-y-2">
                   {Object.keys(productCategories).map((category) => (
                     <li
                       key={category}
-                      className={`cursor-pointer p-2 rounded-md ${
-                        selectedCategory === category ? "bg-gray-200 font-bold" : "hover:bg-gray-100"
+                      className={`cursor-pointer p-2 rounded-md hover:bg-gray-200 ${
+                        selectedCategory === category ? "bg-gray-300" : ""
                       }`}
                       onClick={() => setSelectedCategory(category as keyof typeof productCategories)}
                     >
@@ -175,45 +243,63 @@ export const Sidebar = ({
                   ))}
                 </ul>
               </div>
-              <div className="flex-1 p-4 grid grid-cols-3 gap-4 overflow-y-auto">
-                {filteredProducts.map((product) => (
-                  <div
-                    key={product.id}
-                    className="border p-4 rounded-md hover:shadow-md cursor-pointer"
-                    onClick={() => handleProductSelect(product)}
-                  >
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-full h-[100px] object-cover rounded-md mb-2"
-                    />
-                    <h4 className="font-bold text-center">{product.name}</h4>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
-      {/* Popup for color selection */}
-      {isColorPickerOpen && selectedProduct && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-[400px]">
-            <h3 className="text-lg font-bold mb-4">Select a Color</h3>
-            <div className="flex flex-wrap gap-2">
-              {selectedProduct.colors.map((color) => (
-                <button
-                  key={color}
-                  className={`p-2 rounded-md border hover:shadow-md ${
-                    selectedColor === color ? "border-black" : "border-gray-300"
-                  }`}
-                  style={{ backgroundColor: color.toLowerCase() }}
-                  onClick={() => handleColorSelect(color)}
-                >
-                  {color}
-                </button>
-              ))}
+              {/* Right Section to Display Created Products */}
+              <div className="flex-1 p-4 overflow-y-auto max-h-[600px]">
+                {/* Filters Section */}
+                <div className="flex space-x-4 mb-4">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search Products"
+                    className="p-2 border rounded-md"
+                  />
+                  <select
+                    value={selectedColor}
+                    onChange={(e) => setSelectedColor(e.target.value)}
+                    className="p-2 border rounded-md"
+                  >
+                    <option value="">All Colors</option>
+                    <option value="Red">Red</option>
+                    <option value="Blue">Blue</option>
+                    <option value="Green">Green</option>
+                    <option value="Black">Black</option>
+                    <option value="White">White</option>
+                  </select>
+                  <select
+                    value={selectedGender}
+                    onChange={(e) => setSelectedGender(e.target.value)}
+                    className="p-2 border rounded-md"
+                  >
+                    <option value="">All Genders</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
+                  <button
+                    className="bg-gray-300 text-black p-2 rounded-md"
+                    onClick={handleResetFilters}
+                  >
+                    Reset Filters
+                  </button>
+                </div>
+
+                {/* Product Grid */}
+                <div className="grid grid-cols-3 gap-4">
+                  {filteredProducts.map((product) => (
+                    <div
+                      key={product.id}
+                      className="border p-4 rounded-md cursor-pointer"
+                      onClick={() => handleProductSelect(product)}
+                    >
+                      <img src={product.image} alt={product.name} className="w-full h-40 object-cover" />
+                      <h4 className="text-lg font-bold">{product.name}</h4>
+                      <p>{product.size}</p>
+                      <p>{product.color}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -221,3 +307,5 @@ export const Sidebar = ({
     </>
   );
 };
+
+
